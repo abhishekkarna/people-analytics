@@ -1,0 +1,25 @@
+{
+  "roles": [
+    {
+      "name": "staff",
+      "permissions": []
+    },
+    {
+      "name": "admin",
+      "permissions": [
+        "employee/read_record",
+        "employee/update_record",
+        "employee/delete_record"
+      ]
+    },
+    {
+      "name": "superadmin",
+      "permissions": [
+        "employee/create_record",
+        "employee/read_record",
+        "employee/update_record",
+        "employee/delete_record"
+      ]
+    }
+  ]
+}

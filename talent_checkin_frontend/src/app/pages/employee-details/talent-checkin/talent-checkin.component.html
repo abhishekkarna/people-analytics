@@ -1,0 +1,113 @@
+<div class="container">
+    <div class="d-flex">
+        <h3>Talent check-in data</h3>
+
+        <button class="m-l-auto" color="primary" mat-raised-button (click)="openTalentCheckinDialog()">Talent
+            checkin</button>
+    </div>
+
+    <div class="row">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="data?.rows" class="w-100">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="cycle">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Cycle
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.cycle }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="high_impact_talent">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14" style="text-wrap-mode: nowrap;">
+                        High Impact Talent
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-center">
+                        {{ element.high_impact_talent }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="needs_improvement_talent">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Needs improvement
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.needs_improvement_talent }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="strengths">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Strengths
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.strengths }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="opportunity_areas">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Opportunity areas
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.opportunity_areas }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="flight_risk">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Flight risk
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.flight_risk }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="career_aspirations">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Career aspirations
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.career_aspirations }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="planned_actions">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Planned actions
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.planned_actions }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="session_notes">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Session notes
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.session_notes }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action_plan_highlights">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Action plan highlights
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.action_plan_highlights }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="quarterly_progress_update">
+                    <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                        Quarterly progress update
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.quarterly_progress_update }}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                        No historical data.
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

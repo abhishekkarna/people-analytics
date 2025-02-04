@@ -1,0 +1,76 @@
+<!-- employee-input-dialog.component.html -->
+<h1 mat-dialog-title>Employee Performance Input</h1>
+<form [formGroup]="talentCheckinForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Cycle</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="cycle" readonly="" />
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">High Impact Talent</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <mat-select formControlName="high_impact_talent">
+                <mat-option value="Yes">Yes</mat-option>
+                <mat-option value="No">No</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Needs Improvement Talent</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <mat-select formControlName="needs_improvement_talent">
+                <mat-option value="Yes">Yes</mat-option>
+                <mat-option value="No">No</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Strengths</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="strengths" />
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Opportunity Areas</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="opportunity_areas" />
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Flight Risk</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <mat-select formControlName="flight_risk">
+                <mat-option value="Low">Low</mat-option>
+                <mat-option value="Medium">Medium</mat-option>
+                <mat-option value="High">High</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Career Aspirations</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="career_aspirations" />
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Planned Actions</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="planned_actions" />
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Session Notes</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <textarea matInput formControlName="session_notes"></textarea>
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Action Plan Highlights</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <textarea matInput formControlName="action_plan_highlights"></textarea>
+        </mat-form-field>
+
+        <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Quarterly Progress Update</mat-label>
+        <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="quarterly_progress_update" />
+        </mat-form-field>
+
+    </div>
+
+    <mat-dialog-actions>
+        <button mat-button (click)="onClose()">Cancel</button>
+        <button mat-button type="submit" [disabled]="!talentCheckinForm.valid">Submit</button>
+    </mat-dialog-actions>
+</form>

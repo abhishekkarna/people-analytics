@@ -1,0 +1,22 @@
+<div *ngIf="employeeDetails$ | async as employeeData; else loading">
+    <h2>Employee Details</h2>
+
+    <p>Name: {{ employeeData[0]?.User.name }}</p>
+    <p>Email: {{ employeeData[0]?.User.email }}</p>
+    <p>Job Profile: {{ employeeData[0]?.jobProfile?.name }}</p>
+
+    <mat-divider></mat-divider>
+    <div class="m-t-16">
+        <app-talent-checkin [data]="employeeData[1]" [employeeId]="employeeId$.value"></app-talent-checkin>
+    </div>
+
+    <mat-divider class="m-t-16"></mat-divider>
+
+    <div class="m-t-12">
+        <app-performance-data [data]="employeeData[2]"></app-performance-data>
+    </div>
+</div>
+
+<ng-template #loading>
+    <p>Loading employee details...</p>
+</ng-template>
