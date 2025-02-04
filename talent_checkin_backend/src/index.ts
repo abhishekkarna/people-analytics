@@ -3,14 +3,11 @@
 import express from "express";
 import cors from "cors";
 import compression from "compression";
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
 import dotenv from "dotenv";
 dotenv.config();
 import { sequelize } from "@db/models/index";
 import associations from "@db/models/associations";
 import Logger from "@utils/logger";
-import swaggerDefinition from "@docs/apidoc";
 import correlator from "express-correlation-id";
 import { Application } from "express";
 import { apiRoutes } from "./routes";
@@ -38,10 +35,6 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"), false);
     }
   },
-};
-const swaggerOptions = {
-  swaggerDefinition,
-  apis: ["./src/routes/*.ts"], // Adjust for TypeScript files
 };
 process.on("SIGINT", () => {
   logger.log("stopping the server", "info");
@@ -75,22 +68,7 @@ app.use(compression());
 app.use("/api/v1", apiRoutes);
 app.use(errorHandler);
 
-// const swaggerSpec = swaggerJSDoc(swaggerOptions);
-// if (
-//   process.env.NODE_ENV === "development" ||
-//   process.env.NODE_ENV === undefined
-// ) {
-//   app.use(
-//     "/docs",
-//     swaggerUi.serve,
-//     swaggerUi.setup(swaggerSpec, {
-//       swaggerOptions: { persistAuthorization: true },
-//     })
-//   );
-// }
-
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
-
 export default app;
