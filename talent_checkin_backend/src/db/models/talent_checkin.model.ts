@@ -15,10 +15,6 @@ const TalentCheckin = sequelize.define<TalentCheckinInstance>(
     employee_id: {
       allowNull: false,
       type: DataTypes.TEXT,
-      references: {
-        model: "user",
-        key: "employee_id",
-      },
     },
     cycle: {
       allowNull: false,

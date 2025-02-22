@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "@db/models/user.model";
 import Employee from "@db/models/employee.model";
+console.log("Using the USER model----------------", Employee.associations);
 const SECRET_KEY = process.env.JWT_SECRET || "";
 const REFRESH_JWT_SECRET = process.env.REFRESH_JWT_SECRET || "";
 if (!SECRET_KEY) throw new Error("JWT secret key not defined");
@@ -9,8 +10,6 @@ if (!SECRET_KEY) throw new Error("JWT secret key not defined");
 export class AuthService {
   async login(email: string, password: string) {
     try {
-      const userAll = await User.findAll()
-      console.log("-----",userAll)
       const user = await User.findOne({
         where: {
           email,

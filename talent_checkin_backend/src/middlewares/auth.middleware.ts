@@ -60,6 +60,7 @@ function isAuthorized(accessRequired: string[], currentRoleName: string) {
   const currentPermissions = permissionJson.roles.find(
     (role: any) => role.name === currentRoleName
   );
+  if (!currentPermissions) return false;
   const isAuthorized = accessRequired.every((access) =>
     currentPermissions.permissions.includes(access)
   );
@@ -71,7 +72,7 @@ export function hasReadEmployeePermissions(
   next: NextFunction
 ): void {
   const accessRequired = ["employee/read_record"];
-  const roleName: string = req.user["Employee.jobProfile.type"];
+  const roleName: string = req.user?.Employee?.jobProfile?.type || "";
   if (isAuthorized(accessRequired, roleName)) {
     next();
   } else {

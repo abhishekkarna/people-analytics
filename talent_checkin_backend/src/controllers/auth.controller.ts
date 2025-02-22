@@ -2,6 +2,9 @@
 
 import { Request, Response } from "express";
 import { AuthService } from "@services/auth.service";
+import Logger from "@utils/logger";
+
+const logger = new Logger();
 
 class AuthController {
   private authService: AuthService;
@@ -16,8 +19,9 @@ class AuthController {
       const { email, password } = req.body;
       const response = await this.authService.login(email, password);
       res.status(200).json(response);
-    } catch (error) {
-      res.status(401).json(error);
+    } catch (error: any) {
+      logger.log(error.message, "error", error);
+      res.status(401).json(error.message);
     }
   };
 

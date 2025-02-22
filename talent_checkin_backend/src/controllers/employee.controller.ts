@@ -2,7 +2,6 @@
 
 import { Request, Response } from "express";
 import { EmployeeService } from "@services/employee.service";
-import { EmployeeInstance } from "@interfaces/employee.interface";
 import bcrypt from "bcryptjs";
 
 class EmployeeController {

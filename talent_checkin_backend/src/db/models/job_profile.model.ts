@@ -27,5 +27,5 @@ const JobProfile = sequelize.define<JobProfileInstance>(
     freezeTableName: true,
   }
 );
-// JobProfile.hasMany(Employee, { foreignKey: 'job_profile_id' });
+
 export default JobProfile;

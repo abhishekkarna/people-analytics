@@ -24,7 +24,7 @@ import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 // };
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error("Unhandled error----------------------", err); // Log the error for debugging
+  console.log("-----------------Unhandled error----------------------", err); // Log the error for debugging
   // If it's a known error, send a specific message
   if (err.isOperational) {
     res.status(err.statusCode || 500).json({

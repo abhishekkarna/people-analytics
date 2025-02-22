@@ -1,7 +1,4 @@
 import { Sequelize } from "sequelize";
-import JobProfile from "@db/models/job_profile.model";
-import Employee from "@db/models/employee.model";
-import associations from "@db/models/associations";
 import { DB_CONFIG } from "@config/database";
 import { Config } from "@interfaces/dbConfig.interface";
 
@@ -11,7 +8,6 @@ const ENV: keyof Config =
 const dbConfig = DB_CONFIG[ENV];
 
 if (!dbConfig) throw new Error("DB config missing");
-console.log("===========", dbConfig);
 const sequelize = new Sequelize(
   dbConfig?.database,
   dbConfig.username,
@@ -19,10 +15,23 @@ const sequelize = new Sequelize(
   {
     dialect: dbConfig.dialect,
     host: dbConfig.host,
+    pool: {
+      max: 10, // Maximum number of connections
+      min: 0, // Minimum number of connections
+      acquire: 30000, // Max time (ms) to get a connection
+      idle: 10000, // Time before releasing connection
+    },
   }
 );
 
-sequelize.sync({ force: false }).then(() => {
-  console.log("Database synced with associations!");
-});
-export { Sequelize, sequelize };
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Database connected successfully");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    process.exit(1);
+  }
+};
+
+export { Sequelize, sequelize, connectDB };

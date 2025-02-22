@@ -15,10 +15,6 @@ const PerformanceData = sequelize.define<PerformanceDataInstance>(
     employee_id: {
       allowNull: false,
       type: DataTypes.TEXT,
-      references: {
-        model: "user",
-        key: "employee_id",
-      },
     },
     cycle: {
       allowNull: false,

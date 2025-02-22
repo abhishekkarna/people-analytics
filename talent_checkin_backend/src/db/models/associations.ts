@@ -1,33 +1,48 @@
 import User from "@db/models/user.model";
 import Employee from "@db/models/employee.model";
 import JobProfile from "@db/models/job_profile.model";
-import { sequelize, Sequelize } from ".";
-console.log("----------------------creating associating");
+import Role from "@db/models/role.model";
+import Permission from "@db/models/permission.model";
+import RolePermission from "@db/models/role_permission.model";
 
-// One-to-One Relationship: User has One Employee
-User.hasOne(Employee);
+export const init_associations = () => {
+  // One-to-One Relationship: User has One Employee
+  User.hasOne(Employee, {
+    foreignKey: "employee_id",
+    sourceKey: "employee_id",
+  });
 
-Employee.belongsTo(User, {
-  foreignKey: "employee_id",
-  targetKey: "employee_id",
-  onDelete: "SET NULL",
-  onUpdate: "CASCADE",
-});
+  Employee.belongsTo(User, {
+    foreignKey: "employee_id",
+    targetKey: "employee_id",
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  });
 
-Employee.belongsTo(Employee, { foreignKey: "manager_id", as: "manager" });
-Employee.hasMany(Employee, { foreignKey: "manager_id", as: "subordinates" });
+  Employee.belongsTo(Employee, { foreignKey: "manager_id", as: "manager" });
+  Employee.hasMany(Employee, { foreignKey: "manager_id", as: "subordinates" });
 
-// JobProfile can have many Employees
-JobProfile.hasMany(Employee, {
-  foreignKey: "job_profile_id",
-  as: "employees", // Alias for employees with this job profile
-});
+  JobProfile.hasMany(Employee, {
+    foreignKey: "job_profile_id",
+    as: "employees",
+  });
 
-Employee.belongsTo(JobProfile, {
-  foreignKey: "job_profile_id", // Foreign key referencing JobProfile
-  as: "jobProfile", // Alias for the relationship
-  onUpdate: "CASCADE",
-  onDelete: "SET NULL",
-});
+  Employee.belongsTo(JobProfile, {
+    foreignKey: "job_profile_id",
+    as: "jobProfile",
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  });
 
-export default { User, Employee, JobProfile };
+  // Many-to-Many Relationship
+  Role.belongsToMany(Permission, {
+    through: RolePermission,
+    foreignKey: "roleId",
+  });
+  Permission.belongsToMany(Role, {
+    through: RolePermission,
+    foreignKey: "permissionId",
+  });
+  console.log("Associations established");
+  return { User, Employee, JobProfile };
+};
