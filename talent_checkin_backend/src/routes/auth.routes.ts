@@ -7,3 +7,4 @@ export const authRoutes = Router();
 
 // Authentication routes
 authRoutes.post("/login", authCtrl.login);
+authRoutes.post("/refreshToken", authCtrl.refreshToken);

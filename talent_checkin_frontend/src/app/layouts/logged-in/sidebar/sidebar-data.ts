@@ -9,6 +9,11 @@ export const navItems: NavItem[] = [
     iconName: "layout-grid-add",
     route: "/dashboard",
   },
+  {
+    displayName: "Employees",
+    iconName: "layout-grid-add",
+    route: "/dashboard/employee",
+  },
   // {
   //   displayName: "Analytical",
   //   iconName: "aperture",

@@ -7,8 +7,11 @@ import JobProfile from "@db/models/job_profile.model";
 import User from "@db/models/user.model";
 import bcrypt from "bcryptjs";
 import { UserInstance } from "@interfaces/user.interface";
+import { generateRandomPassword, hashPassword } from "@utils/helper_functions";
 
 export class EmployeeService {
+  WILDCARD_PERMISSIONS = ["employee/*"];
+
   public getAllEmployees() {
     return User.findAll({
       raw: true,
@@ -25,6 +28,7 @@ export class EmployeeService {
           ],
         },
       ],
+      order: [["updatedAt", "desc"]],
     });
   }
 
@@ -47,6 +51,7 @@ export class EmployeeService {
           ],
         },
       ],
+      order: [["updatedAt", "desc"]],
     });
   }
   public getEmployeeByID(id: string) {
@@ -66,20 +71,38 @@ export class EmployeeService {
     });
   }
 
+  async isOwnEmployee(employee_id: string, manager_id: number) {
+    const isEmployeeManager = await Employee.findOne({
+      where: {
+        employee_id,
+        manager_id,
+      },
+      attributes: ["employee_id"],
+    });
+    return isEmployeeManager;
+  }
+
   async createEmployee(
     employeeData: any
   ): Promise<[UserInstance, EmployeeInstance]> {
-    const { name, email, job_profile_id, manager_id, password, _employee_id } =
-      employeeData;
+    const {
+      name,
+      email,
+      job_profile_id,
+      manager_id,
+      is_login_allowed,
+      _employee_id,
+    } = employeeData;
 
-    const passwordHash = password ? await bcrypt.hash(password, 10) : null;
+    const password = is_login_allowed && (await generateRandomPassword(12));
+
     const employee_id = _employee_id ?? Date.now();
 
     const userPromise = User.create({
       email,
       name,
       employee_id,
-      is_login_allowed: !!passwordHash,
+      is_login_allowed,
       password,
     });
     const employeePromise = Employee.create({
@@ -107,5 +130,9 @@ export class EmployeeService {
         employee_id,
       },
     });
+  }
+
+  public getAllJobProfiles() {
+    return JobProfile.findAll();
   }
 }

@@ -2,13 +2,16 @@
 
 import { Request, Response } from "express";
 import { EmployeeService } from "@services/employee.service";
-import bcrypt from "bcryptjs";
+import { isAuthorized } from "@utils/helper_functions";
+import { errorResponse, successResponse } from "@utils/response";
+
+import Logger from "@utils/logger";
+const logger = new Logger();
 
 class EmployeeController {
   private employeeService: EmployeeService;
   constructor(employeeService: EmployeeService) {
     this.employeeService = employeeService;
-    this.getAllEmployees = this.getAllEmployees.bind(this);
   }
 
   // Get all employees
@@ -17,38 +20,54 @@ class EmployeeController {
       const user = req.user;
       let employees: any;
 
-      if (user["Employee.jobProfile.type"] === "superadmin") {
+      if (
+        isAuthorized(
+          this.employeeService.WILDCARD_PERMISSIONS,
+          user.permissions
+        )
+      ) {
         employees = await this.employeeService.getAllEmployees();
       } else {
         employees = await this.employeeService.getEmployeesByManager(
-          user.employee_id
+          user.Employee.employee_id
         );
       }
-      res.status(200).json(employees);
+      res
+        .status(200)
+        .json(successResponse("Employees list fetched", employees));
     } catch (error) {
-      console.error("Error fetching employees:", error);
-      throw error;
+      logger.log(`Error fetching employees: ${error}`, "error");
+      res.status(500).json(errorResponse("Failed to get employees", error));
     }
   };
 
   // Get all employees
   addEmployee = async (req: Request, res: Response) => {
     try {
-      const {
+      let {
         name,
         email,
         job_profile_id,
         manager_id = null,
-        password = null,
-        _employee_id = null,
+        is_login_allowed = false,
       } = req.body;
-      const passwordHash = password ? await bcrypt.hash(password, 10) : null;
+
+      if (
+        !isAuthorized(
+          this.employeeService.WILDCARD_PERMISSIONS,
+          req.user.permissions
+        )
+      ) {
+        // Assign the current user as the manager of the new user if not super-admin
+        manager_id = req.user.Employee.employee_id;
+      }
+
       const [user, _] = await this.employeeService.createEmployee({
         name,
         email,
         job_profile_id,
         manager_id,
-        password: passwordHash,
+        is_login_allowed,
       });
       const { employee_id, id, createdAt } = user;
 
@@ -58,14 +77,18 @@ class EmployeeController {
         createdAt,
         name,
         email,
-        is_login_allowed: !!passwordHash,
+        is_login_allowed,
         job_profile_id,
         manager_id,
       };
-      res.status(201).json(employeeCreateResponse);
+      res
+        .status(201)
+        .json(
+          successResponse("Employee added successfully", employeeCreateResponse)
+        );
     } catch (error) {
-      console.error("Error fetching employees:", error);
-      throw error;
+      logger.log(`Error fetching employees: ${error}`, "error");
+      res.status(500).json(errorResponse("Failed to add employee", error));
     }
   };
 
@@ -76,14 +99,20 @@ class EmployeeController {
       const employee = await this.employeeService.getEmployeeByID(employeeId);
 
       if (!employee) {
-        res.status(404).json({ error: "Employee not found" });
+        res.status(404).json(errorResponse("Employee not found", {}));
         return;
       }
 
-      res.json(employee);
+      res
+        .status(200)
+        .json(
+          successResponse("Employee detail fetched successfully", employee)
+        );
     } catch (error) {
-      console.error("Error fetching employee:", error);
-      throw error;
+      logger.log(`Error fetching employee: ${error}`, "error");
+      res
+        .status(500)
+        .json(errorResponse("Error while fetching employee details", error));
     }
   };
 
@@ -120,10 +149,12 @@ class EmployeeController {
         quarterly_progress_update,
       });
 
-      res.json({ message: "Check-in added successfully" });
+      res.status(201).json(successResponse("Check-in added successfully"));
     } catch (error) {
-      console.error("Error adding check-in:", error);
-      res.status(500).json({ error: "Internal server error" });
+      logger.log(`Error while adding new talent checkin: ${error}`, "error");
+      res
+        .status(500)
+        .json(errorResponse("Failed to add talent checkin data", error));
     }
   };
 
@@ -134,13 +165,24 @@ class EmployeeController {
       const historicalTalentCheckIns =
         await this.employeeService.getHistoricalTalentCheckIns(employeeId);
 
-      res.json({
-        message: "Historical check-ins fetched successfully",
-        data: historicalTalentCheckIns,
-      });
+      res
+        .status(200)
+        .json(
+          successResponse(
+            "Historical check-ins fetched successfully",
+            historicalTalentCheckIns
+          )
+        );
     } catch (error) {
-      console.error("Error adding check-in:", error);
-      res.status(500).json({ error: "Internal server error" });
+      logger.log(
+        `Error getting historical talent checkin data: ${error}`,
+        "error"
+      );
+      res
+        .status(500)
+        .json(
+          errorResponse("Error while fetching historical talent checkin", error)
+        );
     }
   };
 
@@ -152,12 +194,35 @@ class EmployeeController {
         employeeId
       );
 
-      res.status(200).json(performanceData);
+      res
+        .status(200)
+        .json(
+          successResponse("Employee performance data fetched", performanceData)
+        );
     } catch (error) {
-      throw error;
+      logger.log(`Error getting performance data: ${error}`, "error");
+      res
+        .status(500)
+        .json(errorResponse("Error while fetching performance data", error));
+    }
+  };
+
+  // Get job profiles
+  getJobProfiles = async (req: Request, res: Response) => {
+    try {
+      const jobProfiles = await this.employeeService.getAllJobProfiles();
+
+      res
+        .status(200)
+        .json(successResponse("Job profiles data fetched", jobProfiles));
+    } catch (error) {
+      logger.log(`Error getting job profiles data: ${error}`, "error");
+      res
+        .status(500)
+        .json(errorResponse("Error while fetching job profiles data", error));
     }
   };
 }
-// Export an instance of EmployeeController with a service instance
+
 const employeeServiceInstance = new EmployeeService();
 export default new EmployeeController(employeeServiceInstance);

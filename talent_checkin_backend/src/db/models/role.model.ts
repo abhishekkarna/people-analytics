@@ -19,7 +19,7 @@ const Role = sequelize.define<RoleDataInstance>(
   },
   {
     timestamps: true,
-    tableName: "role",
+    tableName: "roles",
     freezeTableName: true,
   }
 );

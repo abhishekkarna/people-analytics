@@ -34,6 +34,9 @@ export const init_associations = () => {
     onDelete: "SET NULL",
   });
 
+  JobProfile.belongsTo(Role, { foreignKey: "role_id" });
+  Role.hasMany(JobProfile, { foreignKey: "role_id" });
+
   // Many-to-Many Relationship
   Role.belongsToMany(Permission, {
     through: RolePermission,
@@ -44,5 +47,5 @@ export const init_associations = () => {
     foreignKey: "permissionId",
   });
   console.log("Associations established");
-  return { User, Employee, JobProfile };
+  return { User, Employee, JobProfile, Role, Permission, RolePermission };
 };

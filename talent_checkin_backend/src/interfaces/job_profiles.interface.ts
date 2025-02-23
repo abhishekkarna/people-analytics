@@ -3,7 +3,7 @@ import { Model, Optional } from "sequelize";
 interface JobProfileAttributes {
   id: string;
   name: string;
-  type: string;
+  role_id: bigint;
 }
 
 interface JobProfileCreationAttributes

@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "@db/models/user.model";
 import Employee from "@db/models/employee.model";
-console.log("Using the USER model----------------", Employee.associations);
 const SECRET_KEY = process.env.JWT_SECRET || "";
 const REFRESH_JWT_SECRET = process.env.REFRESH_JWT_SECRET || "";
+
 if (!SECRET_KEY) throw new Error("JWT secret key not defined");
 
 export class AuthService {
@@ -31,33 +31,46 @@ export class AuthService {
         throw new Error("Invalid username or password");
       }
 
-      const payload = {
-        employee_id: user.employee_id, // employee_id
-        iat: Math.floor(Date.now() / 1000), // Issued At
-        exp: Math.floor(Date.now() / 1000) + 60 * 60, // Expiry (1 hour)
-      };
-      const accessToken = jwt.sign({ ...payload }, SECRET_KEY);
-      const refreshToken = jwt.sign({ sub: user.id }, REFRESH_JWT_SECRET, {
-        expiresIn: "7d",
-      });
-      return { message: "Login successful", accessToken, refreshToken };
+      const accessToken = this._createJWTAccessToken(user.employee_id!);
+      const refreshToken = jwt.sign(
+        { id: user.employee_id },
+        REFRESH_JWT_SECRET,
+        {
+          expiresIn: "7d",
+        }
+      );
+      user.refresh_token = refreshToken;
+      user.save();
+      return { accessToken, refreshToken };
     } catch (error) {
-      throw new Error("Error logging in " + error);
+      throw error;
     }
   }
 
   async validateAndRenewAccessToken(refreshToken: string) {
     try {
-      const decoded = jwt.verify(refreshToken, REFRESH_JWT_SECRET);
-
-      // Generate a new access token
-      const newAccessToken = jwt.sign({ sub: decoded.sub }, SECRET_KEY, {
-        expiresIn: "1h",
+      const decoded = jwt.verify(refreshToken, REFRESH_JWT_SECRET) as {
+        id: string;
+      };
+      const storedToken = await User.findOne({
+        where: { employee_id: decoded.id, refresh_token: refreshToken },
       });
+      if (!storedToken) throw "";
+
+      const newAccessToken = this._createJWTAccessToken(decoded.id);
 
       return { accessToken: newAccessToken };
     } catch (err) {
       throw new Error("Expired/Invalid refresh token");
     }
+  }
+
+  _createJWTAccessToken(employee_id: string) {
+    const payload = {
+      employee_id,
+      iat: Math.floor(Date.now() / 1000), // Issued At
+      exp: Math.floor(Date.now() / 1000) + 60 * 60, // Expiry (1 hour)
+    };
+    return jwt.sign({ ...payload }, SECRET_KEY);
   }
 }

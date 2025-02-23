@@ -14,9 +14,11 @@ module.exports = {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        type: {
-          type: DataTypes.ENUM("staff", "admin", "superadmin"),
+        role_id: {
           allowNull: false,
+          type: DataTypes.BIGINT,
+          onDelete: "SET NULL",
+          onUpdate: "CASCADE",
         },
         createdAt: {
           type: DataTypes.DATE,
@@ -29,6 +31,27 @@ module.exports = {
           defaultValue: DataTypes.NOW,
         },
       });
+
+      // await queryInterface.removeColumn("job_profiles", "type", {
+      //   transaction,
+      // });
+
+      // Add the "role_id" column
+      await queryInterface.addColumn(
+        "job_profiles",
+        "role_id",
+        {
+          allowNull: false,
+          type: DataTypes.BIGINT,
+          references: {
+            model: "roles",
+            key: "id",
+          },
+          onDelete: "SET NULL",
+          onUpdate: "CASCADE",
+        },
+        { transaction }
+      );
     }),
 
   down: (queryInterface: QueryInterface): Promise<void> =>

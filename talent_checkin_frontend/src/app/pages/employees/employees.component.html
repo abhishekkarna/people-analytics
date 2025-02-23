@@ -1,0 +1,50 @@
+@if(!hideEmployeeOption){
+<div class="d-flex">
+    <button class="m-l-auto" color="primary" mat-raised-button (click)="openAddEmployeeDialog()">Add Employee</button>
+</div>
+}
+<div class="row">
+    <div class="table-responsive w-100">
+        <table mat-table [dataSource]="employees$" class="w-100">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                    Name
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.name }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                    Email
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.email }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="jobProfile">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                    Job profile
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element?.['Employee.jobProfile.name'] }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <span role="button" (click)="openEmployeeDetails(element['Employee.employee_id'])"
+                        class="cursor-pointer">
+                        <mat-icon>remove_red_eye</mat-icon>
+                    </span>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
+</div>

@@ -19,7 +19,7 @@ const Permission = sequelize.define<PermissionDataInstance>(
   },
   {
     timestamps: true,
-    tableName: "permission",
+    tableName: "permissions",
     freezeTableName: true,
   }
 );

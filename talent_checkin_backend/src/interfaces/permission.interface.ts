@@ -1,6 +1,6 @@
 import { Model, Optional } from "sequelize";
 
-interface PermissionDataAttributes {
+export interface PermissionDataAttributes {
   id: bigint;
   name: string;
 }

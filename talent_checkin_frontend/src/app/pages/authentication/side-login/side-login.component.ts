@@ -6,6 +6,7 @@ import { MaterialModule } from "src/app/material.module";
 import { FormsModule } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+import { tap } from "rxjs";
 
 @Component({
   selector: "app-side-login",
@@ -31,10 +32,9 @@ export class AppSideLoginComponent {
     if (!email || !password) return;
 
     this.authservice.login(this.authForm.value).subscribe({
-      next: ({ accessToken, refreshToken }) => {
-        if (!accessToken || !refreshToken) throw new Error("Token not found");
+      next: ({ accessToken }) => {
+        if (!accessToken) throw new Error("Token not found");
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
         this.router.navigate(["/dashboard"]);
       },
     });

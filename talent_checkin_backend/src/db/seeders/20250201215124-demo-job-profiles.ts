@@ -3,26 +3,26 @@
 import { QueryInterface } from "sequelize";
 
 const jobProfiles = [
-  { name: "Chief Innovation Officer (CIO)", type: "superadmin" },
-  { name: "Senior Brand Strategist", type: "staff" },
-  { name: "Head of Operations", type: "staff" },
-  { name: "Client Relations Manager", type: "admin" },
-  { name: "Lead Product Designer", type: "staff" },
-  { name: "Junior Product Development Specialist", type: "staff" },
-  { name: "Project Coordinator", type: "staff" },
-  { name: "Business Analyst", type: "staff" },
-  { name: "Risk Management Specialist", type: "staff" },
-  { name: "Senior Resource Manager", type: "admin" },
-  { name: "People Manager", type: "admin" },
-  { name: "CEO", type: "superadmin" },
+  { name: "Chief Innovation Officer (CIO)", role_id: 3 },
+  { name: "Senior Brand Strategist", role_id: 1 },
+  { name: "Head of Operations", role_id: 1 },
+  { name: "Client Relations Manager", role_id: 2 },
+  { name: "Lead Product Designer", role_id: 1 },
+  { name: "Junior Product Development Specialist", role_id: 1 },
+  { name: "Project Coordinator", role_id: 1 },
+  { name: "Business Analyst", role_id: 1 },
+  { name: "Risk Management Specialist", role_id: 1 },
+  { name: "Senior Resource Manager", role_id: 2 },
+  { name: "People Manager", role_id: 2 },
+  { name: "CEO", role_id: 3 },
 ];
 
 export const up = async (queryInterface: QueryInterface): Promise<void> => {
   await queryInterface.bulkInsert(
     "job_profiles",
-    jobProfiles.map(({ name, type }) => ({
+    jobProfiles.map(({ name, role_id }) => ({
       name,
-      type,
+      role_id,
       createdAt: new Date(),
       updatedAt: new Date(),
     })),

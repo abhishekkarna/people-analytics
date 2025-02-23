@@ -6,7 +6,7 @@ const RolePermission = sequelize.define(
   {},
   {
     timestamps: true,
-    tableName: "role_permission",
+    tableName: "role_permissions",
     freezeTableName: true,
   }
 );

@@ -8,12 +8,14 @@ import {
   Observable,
   of,
   switchMap,
+  tap,
 } from "rxjs";
 import { EmployeeService } from "src/app/services/employee.service";
 import { PerformanceDataComponent } from "./performance-data/performance-data.component";
 import { TalentCheckinComponent } from "./talent-checkin/talent-checkin.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { CoreService } from "src/app/services/core.service";
 
 @Component({
   selector: "app-employee-details",
@@ -30,7 +32,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class EmployeeDetailsComponent {
   employeeId$: BehaviorSubject<string> = new BehaviorSubject("");
   employeeDetails$: Observable<any>;
-  private _snackBar = inject(MatSnackBar);
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService
@@ -57,16 +58,6 @@ export class EmployeeDetailsComponent {
           talentCheckinDetails$,
           performanceDetails$,
         ]);
-      }),
-      catchError((err) => {
-        console.log("error", err);
-        this._snackBar.open(err.statusText, undefined, {
-          direction: "ltr",
-          verticalPosition: "top",
-          horizontalPosition: "right",
-          duration: 3000,
-        });
-        return of(err);
       })
     );
   }

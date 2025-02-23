@@ -16,9 +16,11 @@ const JobProfile = sequelize.define<JobProfileInstance>(
       allowNull: false,
       type: DataTypes.TEXT,
     },
-    type: {
+    role_id: {
       allowNull: false,
-      type: DataTypes.ENUM("staff", "admin", "superadmin"),
+      type: DataTypes.BIGINT,
+      onDelete: "SET NULL",
+      onUpdate: "CASCADE",
     },
   },
   {

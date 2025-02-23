@@ -15,8 +15,8 @@
   </mat-sidenav>
   <mat-sidenav-content class="contentWrapper" #content>
 
-    <app-header [showToggle]="!isOver" (logout)="logout()" (toggleMobileNav)="sidenav.toggle()"></app-header>
-
+    <app-header [showToggle]="!isOver" (logout)="logout()" (toggleMobileNav)="sidenav.toggle()"
+      [userInfo]="settings.getUserInfo()"></app-header>
     <main class="pageWrapper maxWidth">
       <router-outlet></router-outlet>
     </main>

@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import compression from "compression";
 import correlator from "express-correlation-id";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -35,6 +36,7 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"), false);
     }
   },
+  credentials: true,
 };
 process.on("SIGINT", () => {
   logger.log("stopping the server", "info");
@@ -65,6 +67,7 @@ app.use(express.json({ limit: "100mb" }));
 app.use(correlator());
 app.use(compression());
 app.use(errorHandler);
+app.use(cookieParser());
 app.use("/api/v1", apiRoutes);
 
 connectDB().then(() => {

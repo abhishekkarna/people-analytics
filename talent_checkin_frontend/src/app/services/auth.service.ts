@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "./api.service";
 import { environment } from "../../environments/environment.development";
 import { map, Observable } from "rxjs";
+import { APIResponse } from "../interfaces/response.interface";
 interface loginPayload {
   email: string | null;
   password: string | null;
@@ -9,11 +10,12 @@ interface loginPayload {
 interface loginResponse {
   message: string;
   accessToken: string;
-  refreshToken: string;
 }
 
 const API_URLS = {
   LOGIN_ENDPOINT: "/auth/login",
+  REFRESH_TOKEN_ENDPOINT: "/auth/refreshToken",
+  GET_USER_INFO_ENDPOINT: "/user/info",
 };
 
 @Injectable({
@@ -26,7 +28,8 @@ export class AuthService {
   public login(eventPayload: any): Observable<loginResponse> {
     return this.api.post(
       environment.BASE_API_URL + API_URLS.LOGIN_ENDPOINT,
-      eventPayload
+      eventPayload,
+      { withCredentials: true }
     );
   }
 
@@ -34,8 +37,7 @@ export class AuthService {
    */
   public getToken() {
     const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("accessToken");
-    return { accessToken, refreshToken };
+    return accessToken;
   }
 
   isAuthenticated(): boolean {
@@ -43,17 +45,17 @@ export class AuthService {
     return !!token && !this.isTokenExpired(token);
   }
 
-  // ✅ Store the access token
+  // Store the access token
   setToken(token: string): void {
     localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
   }
 
-  // ✅ Remove the token (Logout)
+  // Remove the token (Logout)
   logout(): void {
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
   }
 
-  // ✅ Decode JWT Token to check expiration
+  // Decode JWT Token to check expiration
   private isTokenExpired(token: string): boolean {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
@@ -62,5 +64,20 @@ export class AuthService {
     } catch (error) {
       return true; // If decoding fails, assume expired
     }
+  }
+
+  // Decode JWT Token to check expiration
+  public refreshToken(): Observable<any> {
+    return this.api.post(
+      environment.BASE_API_URL + API_URLS.REFRESH_TOKEN_ENDPOINT,
+      {},
+      { withCredentials: true }
+    );
+  }
+
+  public getUserInfo(): Observable<any> {
+    return this.api.post(
+      environment.BASE_API_URL + API_URLS.GET_USER_INFO_ENDPOINT
+    );
   }
 }

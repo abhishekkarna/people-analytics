@@ -21,11 +21,7 @@ employeeRoutes.post(
   hasWriteEmployeePermissions,
   employeeCtrl.addEmployee
 );
-employeeRoutes.get(
-  "/:employee_id",
-  hasSpecificEmployeePermissions,
-  employeeCtrl.getEmployeeById
-);
+
 employeeRoutes.get(
   "/talent-check-in/:employee_id",
   hasSpecificEmployeePermissions,
@@ -40,4 +36,11 @@ employeeRoutes.get(
   "/performance/:employee_id",
   hasSpecificEmployeePermissions,
   employeeCtrl.getPerformanceData
+);
+employeeRoutes.get("/job-profiles", employeeCtrl.getJobProfiles);
+employeeRoutes.get("/org-chart", employeeCtrl.getHierarchy);
+employeeRoutes.get(
+  "/:employee_id",
+  hasSpecificEmployeePermissions,
+  employeeCtrl.getEmployeeById
 );

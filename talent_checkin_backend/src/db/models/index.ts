@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { DB_CONFIG } from "@config/database";
+const DB_CONFIG = require("@config/database");
 import { Config } from "@interfaces/dbConfig.interface";
 
 const ENV: keyof Config =

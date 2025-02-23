@@ -24,7 +24,7 @@
                         High Impact Talent
                     </th>
                     <td mat-cell *matCellDef="let element" class="text-center">
-                        {{ element.high_impact_talent }}
+                        {{ element.high_impact_talent ? "Yes" : "No" }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="needs_improvement_talent">
@@ -32,7 +32,7 @@
                         Needs improvement
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.needs_improvement_talent }}
+                        {{ element.needs_improvement_talent ? "Yes" : "No" }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="strengths">

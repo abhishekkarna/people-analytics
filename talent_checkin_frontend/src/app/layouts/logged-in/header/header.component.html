@@ -20,6 +20,11 @@
   </button>
   <mat-menu #profilemenu="matMenu" class="cardWithShadow topbar-dd">
 
+    <div class="p-x-12 m-t-12 text-center">
+      <span class="text-secondary">{{userInfo?.email}} </span>
+      <p class="text-bold">{{userInfo?.role | uppercase}}</p>
+    </div>
+
     <div class="p-x-12 m-t-12">
       <a (click)="logout.emit()" mat-stroked-button class="w-100">Logout</a>
     </div>

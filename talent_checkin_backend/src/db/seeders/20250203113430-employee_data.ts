@@ -109,7 +109,7 @@ const employees = [
 ];
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface: any, Sequelize: any) {
     const users = await Promise.all(
       employees.map(async (emp) => {
         const [user] = await queryInterface.bulkInsert(
@@ -149,7 +149,7 @@ module.exports = {
     );
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: any, Sequelize: any) {
     await queryInterface.bulkDelete("employee", null, {});
     await queryInterface.bulkDelete("user", null, {});
   },

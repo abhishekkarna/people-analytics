@@ -15,3 +15,11 @@ export interface Employee {
   jobProfile: JobProfile;
   manager: Employee | null;
 }
+
+export interface iEmployeePayload {
+  name: string;
+  email: string;
+  is_login_allowed: boolean;
+  job_profile_id: number;
+  manager_id: string | null;
+}

@@ -10,6 +10,7 @@ import { MaterialModule } from "src/app/material.module";
 import { RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { NgScrollbarModule } from "ngx-scrollbar";
+import { UserInfo } from "src/app/interfaces/user.interface";
 
 @Component({
   selector: "app-header",
@@ -26,6 +27,7 @@ import { NgScrollbarModule } from "ngx-scrollbar";
 export class HeaderComponent {
   @Input() showToggle = true;
   @Input() toggleChecked = false;
+  @Input() userInfo: UserInfo = {};
   @Output() toggleMobileNav = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 }

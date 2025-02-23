@@ -19,6 +19,7 @@ import { navItems } from "./sidebar/sidebar-data";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthInterceptor } from "src/app/interceptors/auth.interceptor";
 import { AuthService } from "src/app/services/auth.service";
+import { UserInfo } from "src/app/interfaces/user.interface";
 
 const MOBILE_VIEW = "screen and (max-width: 768px)";
 const TABLET_VIEW = "screen and (min-width: 769px) and (max-width: 1024px)";
@@ -47,6 +48,7 @@ export class LoggedInComponent {
   @ViewChild("content", { static: true }) content!: MatSidenavContent;
   //get options from service
   options = this.settings.getOptions();
+  userInfo = this.settings.getUserInfo();
   private layoutChangesSubscription = Subscription.EMPTY;
   private isMobileScreen = false;
   private isContentWidthFixed = true;
@@ -58,7 +60,7 @@ export class LoggedInComponent {
   }
 
   constructor(
-    private settings: CoreService,
+    public settings: CoreService,
     private authService: AuthService,
     private router: Router,
     private breakpointObserver: BreakpointObserver
@@ -85,7 +87,11 @@ export class LoggedInComponent {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService
+      .getUserInfo()
+      .subscribe((userInfo: UserInfo) => this.settings.setUserInfo(userInfo));
+  }
 
   ngOnDestroy() {
     this.layoutChangesSubscription.unsubscribe();
